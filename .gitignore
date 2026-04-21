@@ -1,4 +1,38 @@
+# Node
+node_modules/
+dist/
+build/
+*.tsbuildinfo
+.npm/
+coverage/
 
-node_modules
+# Env / secrets
 .env
+.env.*
+!.env.example
+*.pem
+*.key
+id.json
+keypair*.json
+wallets/
+
+# Anchor / Solana
+target/
+.anchor/
+test-ledger/
 .DS_Store
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Editor
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json.example
+
+# OS
+Thumbs.db

@@ -1,15 +1,9 @@
 {
-  "compilerOptions": {
-    "target": "es2020",
-    "module": "commonjs",
-    "lib": ["es2020"],
-    "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule": true
-  },
-  "ts-node": {
-    "transpileOnly": true
-  }
+  "files": [],
+  "references": [
+    { "path": "./packages/shared" },
+    { "path": "./packages/indexer" },
+    { "path": "./packages/api" },
+    { "path": "./packages/bot" }
+  ]
 }
