@@ -17,7 +17,7 @@ interface Options {
  *
  * Subscribes to program `logsSubscribe`, then fetches each referenced transaction
  * with `getTransaction` to recover block time and full meta. This is the most
- * portable approach — works against any standard Solana RPC.
+ * portable approach - works against any standard Solana RPC.
  *
  * For production throughput swap the `GeyserAdapter` in via `INDEXER_ADAPTER=geyser`.
  */

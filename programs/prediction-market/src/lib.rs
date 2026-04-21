@@ -1,4 +1,4 @@
-//! Prediction Market — binary-outcome AMM with oracle resolution.
+//! Prediction Market - binary-outcome AMM with oracle resolution.
 //!
 //! Design notes
 //! ------------
@@ -10,10 +10,10 @@
 //! equivalent to the FPMM used by several production prediction markets.
 //!
 //! Lifecycle
-//!   1. `initialize_market`  — admin creates market, seeds initial liquidity.
-//!   2. `buy` / `sell`       — traders swap collateral <-> outcome shares.
-//!   3. `resolve_market`     — oracle posts winning outcome after `close_ts`.
-//!   4. `claim`              — holders of winning shares redeem 1:1 collateral.
+//!   1. `initialize_market`  - admin creates market, seeds initial liquidity.
+//!   2. `buy` / `sell`       - traders swap collateral <-> outcome shares.
+//!   3. `resolve_market`     - oracle posts winning outcome after `close_ts`.
+//!   4. `claim`              - holders of winning shares redeem 1:1 collateral.
 //!
 //! The program emits structured events that the off-chain indexer consumes.
 
@@ -572,7 +572,7 @@ pub enum TradeSide {
 }
 
 // ---------------------------------------------------------------------------
-// Events — consumed by the off-chain indexer.
+// Events - consumed by the off-chain indexer.
 // ---------------------------------------------------------------------------
 
 #[event]

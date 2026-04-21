@@ -1,14 +1,14 @@
-# Solana Prediction Market — Indexer, API, and Trading Bot
+# Solana Prediction Market - Indexer, API, and Trading Bot
 
 End-to-end prediction-market stack on Solana. One repo covers the whole pipeline a serious prediction-market operator needs:
 
-- **On-chain AMM program** — Anchor/Rust, constant-product binary-outcome market with oracle resolution.
-- **Chain indexer** — parses program events, writes to Postgres, publishes a live Redis feed. Pluggable ingestion (WebSocket today, Yellowstone gRPC tomorrow).
-- **REST + WebSocket API** — Fastify service for markets, trades, candles, global stats, and live feeds.
-- **Trading bot** — market-maker and statistical-arbitrage strategies behind a common `Strategy` interface, with a pre-trade risk manager and a replay backtester.
-- **Ops** — Docker Compose for local bring-up, GitHub Actions CI, Prometheus metrics.
+- **On-chain AMM program** - Anchor/Rust, constant-product binary-outcome market with oracle resolution.
+- **Chain indexer** - parses program events, writes to Postgres, publishes a live Redis feed. Pluggable ingestion (WebSocket today, Yellowstone gRPC tomorrow).
+- **REST + WebSocket API** - Fastify service for markets, trades, candles, global stats, and live feeds.
+- **Trading bot** - market-maker and statistical-arbitrage strategies behind a common `Strategy` interface, with a pre-trade risk manager and a replay backtester.
+- **Ops** - Docker Compose for local bring-up, GitHub Actions CI, Prometheus metrics.
 
-Built to showcase production patterns for a *smart contract + backend dev specializing in trading automation and prediction markets* — it isn't a toy.
+Built to showcase production patterns for a *smart contract + backend dev specializing in trading automation and prediction markets* - it isn't a toy.
 
 ---
 
@@ -157,9 +157,9 @@ Source: `programs/prediction-market/src/lib.rs`.
 Two strategies plug into a common `Strategy` interface and share a risk manager + executor:
 
 - **Market maker** (`strategies/market-maker.ts`): quotes symmetric bid/ask around a short-window fair-value estimate, with a `tanh`-bounded inventory skew so we naturally bleed risk instead of needing an explicit flatten loop.
-- **Arbitrage** (`strategies/arbitrage.ts`): two signals — sum-of-prices dislocation (`pYes + pNo < 1` after fees) and stale-mid-vs-VWAP. The strategy probes with size scaled to reserve depth and only fires when post-fee edge clears `BOT_ARB_MIN_EDGE_BPS`.
+- **Arbitrage** (`strategies/arbitrage.ts`): two signals - sum-of-prices dislocation (`pYes + pNo < 1` after fees) and stale-mid-vs-VWAP. The strategy probes with size scaled to reserve depth and only fires when post-fee edge clears `BOT_ARB_MIN_EDGE_BPS`.
 
-The executor runs in **dry-run** by default (`BOT_ENABLED=false`) — ideal for CI, devnet, and reviewers. Flip it to live and the `Executor.live()` path is the single documented seam where you plug in priority fees, Jito/Helius staked endpoints, or your preferred submission stack.
+The executor runs in **dry-run** by default (`BOT_ENABLED=false`) - ideal for CI, devnet, and reviewers. Flip it to live and the `Executor.live()` path is the single documented seam where you plug in priority fees, Jito/Helius staked endpoints, or your preferred submission stack.
 
 Pre-trade risk enforces a per-market USD position cap and a rolling daily loss limit. A replay backtester (`npm run backtest --workspace @spmi/bot -- --market=<addr>`) lets you tune parameters against historical reserves from Postgres.
 

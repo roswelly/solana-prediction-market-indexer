@@ -12,7 +12,7 @@ interface Opts {
 /**
  * Order execution layer.
  *
- * In dry-run mode we log what we would have done and return immediately — ideal
+ * In dry-run mode we log what we would have done and return immediately - ideal
  * for devnet / CI. In live mode we build and sign an Anchor `buy`/`sell`
  * instruction, attach recent blockhash, and submit with a tight retry loop.
  *

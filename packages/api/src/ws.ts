@@ -12,7 +12,7 @@ import type { FastifyInstance } from 'fastify';
 export async function registerWsFeed(app: FastifyInstance): Promise<void> {
   const subs = new Map<string, Set<WebSocket>>();
 
-  // Redis subscriber — lazy connect so we don't block boot if redis is down.
+  // Redis subscriber - lazy connect so we don't block boot if redis is down.
   const sub = app.redis.duplicate();
   await sub.subscribe('spmi:events');
   sub.on('message', (_channel, message) => {

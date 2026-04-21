@@ -14,7 +14,7 @@ interface Opts extends StrategyContext {
  *    keeping post-trade edge above the configured floor.
  *
  * 2. `stale-mid`: compare AMM mid vs. 30s rolling VWAP. If VWAP is persistently
- *    above (below) mid by more than `minEdgeBps`, take the other side — a
+ *    above (below) mid by more than `minEdgeBps`, take the other side - a
  *    simple but surprisingly effective signal on thin markets.
  */
 export class ArbitrageStrategy extends Strategy {

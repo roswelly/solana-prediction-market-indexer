@@ -1,5 +1,5 @@
 -- ============================================================================
--- Prediction Market Indexer — initial schema
+-- Prediction Market Indexer - initial schema
 -- ============================================================================
 -- Idempotent: safe to run on boot. Use a proper migration runner (e.g. Flyway,
 -- node-pg-migrate) once multiple revisions exist; for a single-rev bootstrap
@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS indexer_cursor (
     updated_at      TIMESTAMPTZ NOT NULL
 );
 
--- Materialized hot stats view — cheap to compute, refreshed on each trade.
+-- Materialized hot stats view - cheap to compute, refreshed on each trade.
 CREATE OR REPLACE VIEW market_stats AS
 SELECT
     m.address,

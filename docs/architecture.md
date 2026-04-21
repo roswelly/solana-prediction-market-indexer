@@ -30,9 +30,9 @@ On boot, the WebSocket adapter:
 1. Subscribes to `logsSubscribe` for the program (live stream).
 2. In parallel, calls `getSignaturesForAddress` for the last `INDEXER_BACKFILL_SLOTS` and replays each through the same pipeline as live events.
 
-Because writes are idempotent, any overlap between backfill and live is benign. If the process crashes and restarts, we simply re-run the backfill window — anything already written gets skipped by the ON CONFLICT clauses.
+Because writes are idempotent, any overlap between backfill and live is benign. If the process crashes and restarts, we simply re-run the backfill window - anything already written gets skipped by the ON CONFLICT clauses.
 
-For deeper history (e.g. after a long outage) point the adapter at a chain-history provider (Helius DAS, BigQuery dataset) and feed signatures into the same pipeline — the parser is pure, so the source is swappable.
+For deeper history (e.g. after a long outage) point the adapter at a chain-history provider (Helius DAS, BigQuery dataset) and feed signatures into the same pipeline - the parser is pure, so the source is swappable.
 
 ## 4. Event parsing
 
@@ -49,7 +49,7 @@ If you add a new event, extend `ProgramEvent` in `@spmi/shared/events.ts`, add t
 ## 5. AMM pricing
 
 Constant-product binary market:
-- price = `pYes = noReserve / (yesReserve + noReserve)` — always in `[0,1]`.
+- price = `pYes = noReserve / (yesReserve + noReserve)` - always in `[0,1]`.
 - 1 collateral can be split into 1 YES + 1 NO share (and merged back), so the AMM's price discovery is equivalent to the FPMM used by other prediction markets.
 
 Swap math follows Uniswap v2 with a fee on the input:
@@ -73,7 +73,7 @@ Each strategy:
 
 Risk is pre-trade: a position cap per market and a rolling daily loss limit. The executor idempotency-keys by `clientId` so the same intent fired twice in a tick is a single submission.
 
-The execution path has a clean `dry-run` vs. `live` seam. Dry-run logs the intent and returns. Live is a documented stub — drop in your chosen RPC/priority-fee stack without touching strategy or risk code.
+The execution path has a clean `dry-run` vs. `live` seam. Dry-run logs the intent and returns. Live is a documented stub - drop in your chosen RPC/priority-fee stack without touching strategy or risk code.
 
 ## 7. Failure modes considered
 
@@ -89,7 +89,7 @@ The execution path has a clean `dry-run` vs. `live` seam. Dry-run logs the inten
 ## 8. Extension points
 
 - **New event**: add to `shared/events.ts`, extend parser, add DB handler.
-- **Geyser ingestion**: implement `GeyserAdapter.start()` using `@triton-one/yellowstone-grpc` — the rest of the stack already treats adapters interchangeably.
+- **Geyser ingestion**: implement `GeyserAdapter.start()` using `@triton-one/yellowstone-grpc` - the rest of the stack already treats adapters interchangeably.
 - **New strategy**: extend `Strategy`, register in `bot/main.ts`, add CSV row to `BOT_STRATEGIES`.
-- **GraphQL**: layer on top of the existing Postgres queries — no schema changes needed.
+- **GraphQL**: layer on top of the existing Postgres queries - no schema changes needed.
 - **TimescaleDB**: drop-in replacement for vanilla Postgres; `trades` is already an append-only wide table that trivially becomes a hypertable.

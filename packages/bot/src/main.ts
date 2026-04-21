@@ -11,7 +11,7 @@ async function main() {
   const env = loadEnv();
   const log = logger.child({ svc: 'bot' });
   if (!env.BOT_ENABLED) {
-    log.warn('BOT_ENABLED=false — running in dry-run observation mode (no orders will be sent)');
+    log.warn('BOT_ENABLED=false - running in dry-run observation mode (no orders will be sent)');
   }
 
   const pool = new Pool({ connectionString: env.DATABASE_URL, max: 5 });

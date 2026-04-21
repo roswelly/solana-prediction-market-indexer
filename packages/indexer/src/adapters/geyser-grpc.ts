@@ -31,7 +31,7 @@ export class GeyserAdapter extends EventEmitter {
   async start(): Promise<void> {
     this.log.warn(
       { endpoint: this.opts.endpoint },
-      'GeyserAdapter is a stub — add @triton-one/yellowstone-grpc and implement the stream handler here',
+      'GeyserAdapter is a stub - add @triton-one/yellowstone-grpc and implement the stream handler here',
     );
     throw new Error('GeyserAdapter not implemented. Use INDEXER_ADAPTER=websocket or finish the implementation.');
   }
