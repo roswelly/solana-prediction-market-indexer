@@ -1,0 +1,42 @@
+# robots.txt for Solana Prediction Market Indexer
+# https://roswelly.github.io/solana-prediction-market-indexer/
+
+User-agent: *
+Allow: /
+Disallow: /private/
+Disallow: /*.env$
+Disallow: /node_modules/
+Disallow: /target/
+Disallow: /.anchor/
+Disallow: /dist/
+
+# Block resource-heavy crawlers that rarely drive traffic
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
+# Allow well-behaved AI crawlers (remove any you want to block)
+User-agent: GPTBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+# Crawl politeness
+Crawl-delay: 1
+
+Sitemap: https://roswelly.github.io/solana-prediction-market-indexer/sitemap.xml

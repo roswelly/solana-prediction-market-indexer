@@ -1,0 +1,456 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#0b0f17" />
+
+    <!-- ========= Primary SEO ========= -->
+    <title>Solana Prediction Market Indexer — Anchor AMM, Chain Indexer, Trading Bot</title>
+    <meta
+      name="description"
+      content="Production-grade Solana prediction market stack: Anchor CPMM program, chain event indexer (WebSocket + Geyser), Fastify REST/WebSocket API, and automated market-maker + arbitrage trading bot. Open source, TypeScript + Rust."
+    />
+    <meta
+      name="keywords"
+      content="Solana, prediction markets, Anchor, AMM, smart contracts, indexer, trading bot, market maker, arbitrage, DeFi, Rust, TypeScript, Geyser, Yellowstone, quantitative trading"
+    />
+    <meta name="author" content="Solana Prediction Market Indexer" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <meta name="googlebot" content="index, follow" />
+    <link rel="canonical" href="https://roswelly.github.io/solana-prediction-market-indexer/" />
+
+    <!-- ========= Open Graph ========= -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Solana Prediction Market Indexer" />
+    <meta property="og:title" content="Solana Prediction Market Indexer — Anchor AMM, Chain Indexer, Trading Bot" />
+    <meta
+      property="og:description"
+      content="End-to-end Solana prediction market stack: Anchor AMM program, chain indexer, REST/WS API, and automated trading bot. Open source."
+    />
+    <meta property="og:url" content="https://roswelly.github.io/solana-prediction-market-indexer/" />
+    <meta property="og:image" content="https://roswelly.github.io/solana-prediction-market-indexer/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Solana Prediction Market Indexer architecture diagram" />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- ========= Twitter ========= -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Solana Prediction Market Indexer" />
+    <meta
+      name="twitter:description"
+      content="Anchor AMM program + chain indexer + REST/WS API + market-maker & arbitrage trading bot. Open source."
+    />
+    <meta name="twitter:image" content="https://roswelly.github.io/solana-prediction-market-indexer/og-image.png" />
+
+    <!-- ========= Structured data (JSON-LD) ========= -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareSourceCode",
+        "name": "Solana Prediction Market Indexer",
+        "description": "End-to-end Solana prediction market stack: Anchor AMM program, chain indexer, REST/WebSocket API, and automated market-maker + arbitrage trading bot.",
+        "codeRepository": "https://github.com/roswelly/solana-prediction-market-indexer",
+        "programmingLanguage": ["TypeScript", "Rust"],
+        "runtimePlatform": "Node.js 20",
+        "license": "https://opensource.org/licenses/MIT",
+        "applicationCategory": "DeveloperApplication",
+        "keywords": "Solana, Anchor, prediction markets, AMM, smart contracts, indexer, trading bot, DeFi",
+        "url": "https://roswelly.github.io/solana-prediction-market-indexer/",
+        "author": {
+          "@type": "Person",
+          "name": "YOUR_NAME",
+          "url": "https://github.com/roswelly"
+        }
+      }
+    </script>
+
+    <!-- ========= Icons ========= -->
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%239945FF'/%3E%3Cpath d='M8 11h16l-3 3H5l3-3zm0 5h16l-3 3H5l3-3zm0 5h16l-3 3H5l3-3z' fill='%2314F195'/%3E%3C/svg%3E" />
+
+    <style>
+      :root {
+        --bg: #0b0f17;
+        --bg-alt: #11172232;
+        --panel: #121826;
+        --border: #1f2a3d;
+        --fg: #e7ecf3;
+        --muted: #8b94a7;
+        --accent: #14f195;
+        --accent-2: #9945ff;
+        --warn: #ffb454;
+        --code-bg: #0a0e16;
+        --radius: 14px;
+        --maxw: 1120px;
+      }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+      body {
+        font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, "Inter", Helvetica, Arial, sans-serif;
+        background: radial-gradient(1200px 600px at 15% -10%, #1a1e3a 0%, transparent 60%),
+                    radial-gradient(1000px 500px at 110% 10%, #103827 0%, transparent 55%),
+                    var(--bg);
+        color: var(--fg);
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+      }
+      a { color: var(--accent); text-decoration: none; }
+      a:hover { text-decoration: underline; }
+      code, pre, .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+      .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 22px; }
+
+      /* Header */
+      header.nav {
+        position: sticky; top: 0; z-index: 10;
+        backdrop-filter: blur(12px);
+        background: rgba(11,15,23,0.72);
+        border-bottom: 1px solid var(--border);
+      }
+      .nav-inner {
+        display: flex; align-items: center; justify-content: space-between;
+        height: 60px;
+      }
+      .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; letter-spacing: -0.01em; }
+      .brand-mark {
+        width: 26px; height: 26px; border-radius: 6px;
+        background: linear-gradient(135deg, var(--accent-2), var(--accent));
+      }
+      nav ul { display: flex; gap: 22px; list-style: none; margin: 0; padding: 0; }
+      nav a { color: var(--muted); font-size: 14px; }
+      nav a:hover { color: var(--fg); text-decoration: none; }
+      .btn {
+        display: inline-flex; align-items: center; gap: 8px;
+        padding: 10px 16px; border-radius: 10px; font-weight: 600; font-size: 14px;
+        border: 1px solid var(--border); background: #19212f; color: var(--fg);
+        transition: transform .08s ease, border-color .15s ease, background .15s ease;
+      }
+      .btn:hover { border-color: #2a3a55; background: #1d2635; text-decoration: none; }
+      .btn-primary { background: linear-gradient(135deg, var(--accent-2), #6b29d6); border-color: transparent; color: white; }
+      .btn-primary:hover { filter: brightness(1.08); }
+
+      /* Hero */
+      .hero { padding: 96px 0 72px; }
+      .kicker {
+        display: inline-flex; align-items: center; gap: 8px;
+        padding: 6px 12px; border-radius: 999px;
+        background: rgba(20,241,149,0.08); border: 1px solid rgba(20,241,149,0.22);
+        color: var(--accent); font-size: 12px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
+      }
+      h1 {
+        font-size: clamp(34px, 5.4vw, 62px);
+        line-height: 1.05; letter-spacing: -0.02em;
+        margin: 22px 0 14px;
+      }
+      h1 .grad {
+        background: linear-gradient(90deg, var(--accent) 0%, #4cf0b1 50%, var(--accent-2) 100%);
+        -webkit-background-clip: text; background-clip: text; color: transparent;
+      }
+      .lede { font-size: 18px; color: var(--muted); max-width: 720px; }
+      .cta { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 28px; }
+
+      /* Sections */
+      section { padding: 64px 0; border-top: 1px solid var(--border); }
+      section h2 {
+        font-size: clamp(24px, 3vw, 34px); letter-spacing: -0.01em;
+        margin: 0 0 8px;
+      }
+      section .sub { color: var(--muted); margin: 0 0 36px; max-width: 720px; }
+
+      /* Feature grid */
+      .grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); }
+      .card {
+        background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius);
+        padding: 22px; transition: border-color .15s ease, transform .15s ease;
+      }
+      .card:hover { border-color: #2a3a55; transform: translateY(-2px); }
+      .card h3 { margin: 0 0 8px; font-size: 17px; display: flex; align-items: center; gap: 10px; }
+      .card p { margin: 0; color: var(--muted); font-size: 14px; }
+      .icon {
+        width: 28px; height: 28px; border-radius: 8px;
+        display: grid; place-items: center;
+        background: rgba(153,69,255,0.15); color: var(--accent-2); font-size: 14px;
+      }
+      .icon.g { background: rgba(20,241,149,0.12); color: var(--accent); }
+
+      /* Architecture */
+      .diagram {
+        background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius);
+        padding: 20px; overflow-x: auto;
+      }
+      .diagram pre {
+        margin: 0; color: #c6d0e0; font-size: 13px; line-height: 1.5;
+        white-space: pre;
+      }
+
+      /* Endpoints table */
+      .api-table {
+        width: 100%; border-collapse: collapse;
+        background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden;
+      }
+      .api-table th, .api-table td { padding: 12px 14px; text-align: left; border-bottom: 1px solid var(--border); font-size: 14px; }
+      .api-table th { background: #151d2c; color: var(--muted); font-weight: 600; font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; }
+      .api-table tr:last-child td { border-bottom: none; }
+      .api-table td:first-child { width: 64px; }
+      .method {
+        display: inline-block; padding: 2px 8px; border-radius: 6px; font-size: 11px; font-weight: 700;
+        background: rgba(20,241,149,0.12); color: var(--accent); border: 1px solid rgba(20,241,149,0.25);
+      }
+      .method.ws { background: rgba(153,69,255,0.12); color: var(--accent-2); border-color: rgba(153,69,255,0.3); }
+
+      /* Code blocks */
+      pre.block {
+        background: var(--code-bg); border: 1px solid var(--border); border-radius: var(--radius);
+        padding: 18px 20px; overflow-x: auto; font-size: 13px; line-height: 1.55;
+      }
+      pre.block code { color: #c6d0e0; }
+      pre.block .c { color: #6b7793; }
+      pre.block .k { color: #ff8fb3; }
+      pre.block .s { color: #9ae6b4; }
+
+      /* Tech badges */
+      .badges { display: flex; gap: 8px; flex-wrap: wrap; }
+      .badge {
+        padding: 6px 11px; border-radius: 999px; font-size: 12px; font-weight: 600;
+        background: #19212f; border: 1px solid var(--border); color: var(--muted);
+      }
+      .badge.accent { color: var(--accent); border-color: rgba(20,241,149,0.3); background: rgba(20,241,149,0.08); }
+
+      /* Footer */
+      footer { padding: 40px 0 60px; color: var(--muted); font-size: 14px; border-top: 1px solid var(--border); }
+      footer .foot-inner { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+
+      @media (max-width: 640px) {
+        nav ul { display: none; }
+        .hero { padding: 60px 0 40px; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="nav">
+      <div class="wrap nav-inner">
+        <a href="#" class="brand">
+          <span class="brand-mark" aria-hidden="true"></span>
+          <span>Solana Prediction Market Indexer</span>
+        </a>
+        <nav aria-label="Primary">
+          <ul>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#architecture">Architecture</a></li>
+            <li><a href="#api">API</a></li>
+            <li><a href="#bot">Trading Bot</a></li>
+            <li><a href="#quickstart">Quick start</a></li>
+          </ul>
+        </nav>
+        <a class="btn btn-primary" href="https://github.com/roswelly/solana-prediction-market-indexer" rel="noopener">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8a8 8 0 005.47 7.59c.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.42 7.42 0 014 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+          View on GitHub
+        </a>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="wrap">
+          <span class="kicker">Open Source · MIT · Solana Mainnet / Devnet</span>
+          <h1>Prediction markets on Solana, <span class="grad">end to end.</span></h1>
+          <p class="lede">
+            Anchor AMM program, chain-event indexer, Fastify REST + WebSocket API, and an automated
+            market-maker &amp; arbitrage trading bot — in a single monorepo. Built for production
+            patterns, not demos.
+          </p>
+          <div class="cta">
+            <a class="btn btn-primary" href="https://github.com/roswelly/solana-prediction-market-indexer" rel="noopener">
+              Star on GitHub
+            </a>
+            <a class="btn" href="#quickstart">Quick start →</a>
+            <a class="btn" href="https://github.com/roswelly/solana-prediction-market-indexer/blob/main/docs/architecture.md" rel="noopener">
+              Architecture deep-dive
+            </a>
+          </div>
+          <div class="badges" style="margin-top: 28px;">
+            <span class="badge accent">Solana</span>
+            <span class="badge">Anchor 0.30</span>
+            <span class="badge">Rust</span>
+            <span class="badge">TypeScript</span>
+            <span class="badge">PostgreSQL</span>
+            <span class="badge">Redis</span>
+            <span class="badge">Fastify</span>
+            <span class="badge">Yellowstone gRPC</span>
+            <span class="badge">Prometheus</span>
+            <span class="badge">Docker</span>
+          </div>
+        </div>
+      </section>
+
+      <section id="features">
+        <div class="wrap">
+          <h2>What&rsquo;s in the box</h2>
+          <p class="sub">Five packages, one mental model: events in, state out, strategies act on state.</p>
+          <div class="grid">
+            <div class="card">
+              <h3><span class="icon g">◆</span>On-chain AMM program</h3>
+              <p>Anchor/Rust binary-outcome CPMM with oracle resolution, configurable fees, slippage &amp; math-overflow guards, and four typed events consumed by the indexer.</p>
+            </div>
+            <div class="card">
+              <h3><span class="icon g">⇢</span>Chain indexer</h3>
+              <p>Pluggable ingestion — RPC <code>logsSubscribe</code> today, Yellowstone Geyser gRPC behind the same interface. Per-market ordered pipeline, idempotent upserts, monotonic cursor.</p>
+            </div>
+            <div class="card">
+              <h3><span class="icon">⚡</span>REST + WebSocket API</h3>
+              <p>Fastify service: markets, trades, OHLCV candles, global + per-trader stats. Live <code>/ws</code> feed fanned out from a Redis pub/sub channel.</p>
+            </div>
+            <div class="card">
+              <h3><span class="icon">◈</span>Market-maker bot</h3>
+              <p>Symmetric bid/ask quotes around short-window fair value with <code>tanh</code>-bounded inventory skew. Size scales with reserve depth.</p>
+            </div>
+            <div class="card">
+              <h3><span class="icon">∑</span>Arbitrage bot</h3>
+              <p>Two signals: sum-of-prices dislocation (<code>pYes + pNo &lt; 1</code>) and stale-mid vs. 30s VWAP. Only fires when post-fee edge clears the configured floor.</p>
+            </div>
+            <div class="card">
+              <h3><span class="icon">🛡</span>Risk + execution</h3>
+              <p>Pre-trade risk manager with per-market position cap and rolling daily loss limit. Executor with clean dry-run / live seam for your RPC + priority-fee stack.</p>
+            </div>
+            <div class="card">
+              <h3><span class="icon g">📈</span>Replay backtester</h3>
+              <p>Streams historical trades out of Postgres to tune strategy parameters without hitting the chain.</p>
+            </div>
+            <div class="card">
+              <h3><span class="icon g">⚙</span>Ops-ready</h3>
+              <p>Multi-stage Dockerfile, docker-compose, GitHub Actions CI (TS + <code>anchor build</code>), Prometheus metrics, structured pino logs, Zod-validated env.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="architecture">
+        <div class="wrap">
+          <h2>Architecture</h2>
+          <p class="sub">Events flow in from the adapter, get normalized by the parser, land in Postgres, and fan out to everything else via Redis.</p>
+          <div class="diagram" role="img" aria-label="System architecture diagram">
+<pre>                     ┌───────────────────────────┐
+                     │  prediction_market.so     │   Anchor program
+                     │  (Rust, CPMM AMM, oracle) │
+                     └──────────────┬────────────┘
+                                    │ events (Program data)
+                                    ▼
+        ┌───────────────────────────────────────────────┐
+        │  Ingestion Adapter                            │
+        │   ├── RpcWebSocketAdapter   (logsSubscribe)   │
+        │   └── GeyserGrpcAdapter     (Yellowstone)     │
+        └──────────────┬────────────────────────────────┘
+                       ▼
+              ┌─────────────────────┐
+              │  Event Parser       │  Anchor discriminators
+              │  (Borsh, per-market │  decoded into typed events
+              │   ordered pipeline) │
+              └─────────┬───────────┘
+                        ▼
+              ┌──────────────────┐      ┌─────────────────────┐
+              │  Postgres        │◄────►│  Redis pub/sub      │
+              │  markets/trades  │      │  spmi:events        │
+              └─────────┬────────┘      └──────────┬──────────┘
+                        │                          │
+           ┌────────────┴────────────┐      ┌──────┴────────┐
+           ▼                         ▼      ▼               ▼
+    ┌─────────────┐           ┌──────────────┐      ┌──────────────┐
+    │  REST API   │           │  Trading Bot │      │  WebSocket   │
+    │  /markets   │           │  mm + arb    │      │  live feed   │
+    │  /trades    │           │  risk/exec   │      │  /ws         │
+    │  /stats     │           └──────┬───────┘      └──────────────┘
+    └─────────────┘                  │
+                                     ▼
+                             on-chain submit</pre>
+          </div>
+        </div>
+      </section>
+
+      <section id="api">
+        <div class="wrap">
+          <h2>API surface</h2>
+          <p class="sub">All endpoints are versioned implicitly; everything returns JSON. WebSocket uses a simple <code>{ op, channels }</code> protocol.</p>
+          <table class="api-table">
+            <thead>
+              <tr><th>Method</th><th>Path</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><span class="method">GET</span></td><td><code>/health</code></td><td>Liveness check</td></tr>
+              <tr><td><span class="method">GET</span></td><td><code>/markets</code></td><td>List/filter/sort markets (<code>state</code>, <code>sort</code>, <code>limit</code>, <code>offset</code>)</td></tr>
+              <tr><td><span class="method">GET</span></td><td><code>/markets/:address</code></td><td>Market detail + stats</td></tr>
+              <tr><td><span class="method">GET</span></td><td><code>/markets/:address/candles</code></td><td>OHLCV candles, 5-minute buckets</td></tr>
+              <tr><td><span class="method">GET</span></td><td><code>/trades</code></td><td>Trade history with market/trader filters</td></tr>
+              <tr><td><span class="method">GET</span></td><td><code>/stats/global</code></td><td>Totals + 24h activity</td></tr>
+              <tr><td><span class="method">GET</span></td><td><code>/stats/trader/:trader</code></td><td>Per-trader aggregates</td></tr>
+              <tr><td><span class="method ws">WS</span></td><td><code>/ws</code></td><td>Live feed; subscribe to <code>global</code> or <code>market:&lt;address&gt;</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="bot">
+        <div class="wrap">
+          <h2>Trading automation</h2>
+          <p class="sub">Two strategies behind a common <code>Strategy</code> interface, sharing a pre-trade risk manager and an idempotent executor.</p>
+          <div class="grid">
+            <div class="card">
+              <h3><span class="icon">MM</span>Market maker</h3>
+              <p>Fair value = rolling 5-minute trade-weighted mean. Bid = <code>fv − s − skew</code>, ask = <code>fv + s − skew</code>, where <code>skew</code> is a <code>tanh</code>-bounded function of current inventory. Quote size is 1% of the thinner reserve, capped by the risk manager.</p>
+            </div>
+            <div class="card">
+              <h3><span class="icon">ARB</span>Statistical arbitrage</h3>
+              <p>Signal A: sum-of-prices &lt; 1 after fees → probe both outcomes. Signal B: 30s VWAP vs. AMM mid deviation &gt; <code>BOT_ARB_MIN_EDGE_BPS</code> → take the lagging side.</p>
+            </div>
+            <div class="card">
+              <h3><span class="icon g">✓</span>Pre-trade risk</h3>
+              <p>Per-market USD position cap, rolling daily loss limit, idempotency keyed on <code>clientId</code>. Rejects are logged with reason and never reach the wire.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="quickstart">
+        <div class="wrap">
+          <h2>Quick start</h2>
+          <p class="sub">Zero-to-live-indexer in about two minutes on a laptop.</p>
+<pre class="block"><code><span class="c"># 1. Install dependencies</span>
+npm install
+
+<span class="c"># 2. Bring up Postgres + Redis, apply schema, seed synthetic data</span>
+cp .env.example .env
+docker compose up -d postgres redis
+npm run db:migrate
+npm run db:seed
+
+<span class="c"># 3. Run off-chain services</span>
+npm run indexer:dev   <span class="c"># ingests from devnet by default</span>
+npm run api:dev       <span class="c"># http://localhost:4000</span>
+npm run bot:dev       <span class="c"># dry-run until BOT_ENABLED=true</span>
+
+<span class="c"># 4. Build &amp; test the Anchor program</span>
+anchor build
+anchor test</code></pre>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="wrap foot-inner">
+        <div>
+          &copy; <span id="year">2026</span> Solana Prediction Market Indexer · MIT License
+        </div>
+        <div>
+          <a href="https://github.com/roswelly/solana-prediction-market-indexer" rel="noopener">GitHub</a>
+          ·
+          <a href="https://github.com/roswelly/solana-prediction-market-indexer/blob/main/docs/architecture.md" rel="noopener">Architecture</a>
+          ·
+          <a href="https://github.com/roswelly/solana-prediction-market-indexer/issues" rel="noopener">Issues</a>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+  </body>
+</html>
